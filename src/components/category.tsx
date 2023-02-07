@@ -1,4 +1,5 @@
 import React from 'react'
+import Onym from './Onym'
 
 interface categoryProps {
     name: string,
@@ -28,14 +29,8 @@ const Category = ({name, definitions, example, synonyms, antonyms, fontName}: ca
         </ul>
       </div>
       <div>
-        {synonyms && synonyms?.length > 0 && <div className='flex gap-5'>
-          <p>Synonyms</p>
-          {synonyms.map((syn, i) => (<p className="text-primary" key={i}>{syn}</p>))}
-        </div>}
-        {antonyms && antonyms?.length > 0 && <div className='flex gap-5'>
-          <p>Antonyms</p>
-          {antonyms.map((ant, i) => (<p className="text-primary" key={i}>{ant}</p>))}
-        </div>}
+        {synonyms && synonyms?.length > 0 && <Onym name='Synonym' onyms={synonyms}/>}
+        {antonyms && antonyms?.length > 0 && <Onym name='Antonym' onyms={antonyms}/>}
       </div>
     </div>
   )
