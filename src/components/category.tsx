@@ -34,7 +34,7 @@ const Category = ({name, definitions, example, synonyms, antonyms, fontName}: ca
         </div>}
         {antonyms && antonyms?.length > 0 && <div className='flex gap-5'>
           <p>Antonyms</p>
-          {antonyms.map((syn, i) => (<p className="text-primary" key={i}>{syn}</p>))}
+          {antonyms.map((ant, i) => (<p className="text-primary" key={i}>{ant}</p>))}
         </div>}
       </div>
     </div>
