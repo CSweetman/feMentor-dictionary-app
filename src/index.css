@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* For hsl(198deg 93% 60% / <alpha-value>) */
+  --color-primary: 274deg 82% 60%;
+  --color-error: 0deg 100% 66%;
+  --color-subtitle: 0deg 0% 51%;
+}
