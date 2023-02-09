@@ -12,6 +12,7 @@ export type fonts = typeof fontNames[number]
 export interface IWord {
     word: string,
     phonetics: string,
+    audio: string,
     meanings: IMeanings[]
 }
 
@@ -37,10 +38,12 @@ const DictionaryPage = () => {
     const handleSearch = (lookUp: string) => {
         GetWordDefinitions(lookUp).then(res => {
             const data = res.data[0]
+            console.log(data)
             const meanings: IMeanings[] = data.meanings
             const searchedWord: IWord = {
                 word: data.word,
-                phonetics: data.phonetics[1],
+                phonetics: data.phonetics[0].text,
+                audio: data.phonetics[data.phonetics.length - 1].audio,
                 meanings: meanings
             }
             setWord(searchedWord)
@@ -60,16 +63,17 @@ const DictionaryPage = () => {
 
 
     // useEffect(() => {
-    //     console.log(word)
+    //     console.log(searchedWord)
+    //     console.log(searchedWord?.audio)
     //     // console.log(word?.meanings[0].definitions.map(def => def.definition))
-    // }, [word])
+    // }, [searchedWord])
 
-    useEffect(() => {
-        console.log(searchedWord)
-    }, [searchedWord])
+    // useEffect(() => {
+    //     console.log(searchedWord)
+    // }, [searchedWord])
 
     return (
-        <div className={`w-[40vw] h-[100vh] flex flex-col items-center m-auto font-${font}`}>
+        <div className={`w-[80vw] lg:w-[40vw] h-[100vh] flex flex-col items-center m-auto font-${font}`}>
             <div className='flex flex-col w-[100%] gap-4 mt-8'>
                 <Navbar font={font} setFont={setFont}></Navbar>
                 <div className='flex w-[95%] m-auto max-h-12 grow-[2] bg-gray-100 rounded-xl focus-within:outline-primary focus-within:outline focus-within:outline-[1px]'>

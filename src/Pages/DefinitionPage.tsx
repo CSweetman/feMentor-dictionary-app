@@ -11,9 +11,20 @@ const DefinitionPage = ({ searchedWord }: DefinitionPageProps) => {
     return (
         <div>
 
-            <h1 className="text-[64px] font-bold">
-                {searchedWord && capitalizeFirstLetter(searchedWord.word)}
-            </h1>
+            <div className='flex justify-between'>
+                <div>
+                    <h1 className="text-[64px] font-bold">
+                        {searchedWord && capitalizeFirstLetter(searchedWord.word)}
+                    </h1>
+                    <p className='text-[20px] text-primary'>{searchedWord.phonetics}</p>
+                </div>
+                <button className='' onClick={e => {
+                    let audio = new Audio(searchedWord.audio)
+                    audio.play()
+                }}>
+                    <img src='src\assets\images\icon-play.svg' />
+                </button>
+            </div>
             {
                 searchedWord && searchedWord?.meanings.map((meaning, i) =>
                     <Meaning

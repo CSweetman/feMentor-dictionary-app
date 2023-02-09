@@ -11,6 +11,10 @@ interface categoryProps {
 
 const Meaning = ({ name: type, definitions, example, synonyms, antonyms }: categoryProps) => {
 
+  // useEffect(() => {
+  //   console.log(example)
+  // }, [])
+
   return (
     <div className={`flex flex-col gap-8 text-[18px] w-[100%]`}>
       <div className='flex items-center mt-5'>
@@ -25,7 +29,7 @@ const Meaning = ({ name: type, definitions, example, synonyms, antonyms }: categ
               <span className='text-black'>{definition}</span>}
             </li>
           ))}
-          {example && <p className='ml-[24px] text-subtitle'>{`"${example[0]}"`}</p>}
+          {example[0] !== undefined && <p className='ml-[24px] text-subtitle'>{`"${example[0]}"`}</p>}
         </ul>
       </div>
       <div>

@@ -46,9 +46,6 @@ const Navbar = ({ font: currentFont, setFont }: NavbarProps) => {
 
 
 
-  useEffect(() => {
-    console.log(currentFont)
-  }, [currentFont])
 
   return (
     <div className='w-[100%] h-8 flex justify-between mb-4'>
