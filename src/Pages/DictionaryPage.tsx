@@ -3,33 +3,35 @@ import Meaning from '../components/Meaning'
 import Navbar from '../components/Navbar'
 import { GetWordDefinitions } from '../utils/DictionaryAPI';
 import { capitalizeFirstLetter } from '../utils/utils';
+import DefinitionPage from './DefinitionPage';
 
 export const fontNames = ['Sans', 'Serif', 'Mono'] as const;
 export type fonts = typeof fontNames[number]
+
+export interface IWord {
+    word: string,
+    phonetics: string,
+    meanings: IMeanings[]
+}
+
+export interface IMeanings {
+    partOfSpeech: string,
+    synonyms: string[],
+    antonyms: string[]
+    definitions: {
+        definition: string
+        example?: string
+    }[]
+    sourceUrls: string[]
+}
 
 const DictionaryPage = () => {
 
     const [font, setFont] = useState<string>("sans")
     const [search, setSearch] = useState("")
     const [badResultFlag, setBadResultFlag] = useState<boolean>(false)
-    const [word, setWord] = useState<IWord | undefined>(undefined)
+    const [searchedWord, setWord] = useState<IWord | undefined>(undefined)
 
-    interface IWord {
-        word: string,
-        phonetics: string,
-        meanings: IMeanings[]
-    }
-
-    interface IMeanings {
-        partOfSpeech: string,
-        synonyms: string[],
-        antonyms: string[]
-        definitions: {
-            definition: string
-            example?: string
-        }[]
-        sourceUrls: string[]
-    }
 
     const handleSearch = (lookUp: string) => {
         GetWordDefinitions(lookUp).then(res => {
@@ -50,9 +52,6 @@ const DictionaryPage = () => {
             handleSearch(search)
     }
 
-    useEffect(() => {
-        handleSearch('Bear')
-    }, [])
 
     // useEffect(() => {
     //     console.log(word)
@@ -60,8 +59,8 @@ const DictionaryPage = () => {
     // }, [word])
 
     useEffect(() => {
-        console.log(font)
-    }, [font])
+        console.log(searchedWord)
+    }, [searchedWord])
 
     return (
         <div className={`w-[40vw] h-[100vh] flex flex-col items-center m-auto font-${font}`}>
@@ -80,21 +79,9 @@ const DictionaryPage = () => {
                     </button>
                 </div>
                 <h1 className="text-[64px] font-bold">
-                    {word && capitalizeFirstLetter(word.word)}
+                    {searchedWord && capitalizeFirstLetter(searchedWord.word)}
                 </h1>
-                {word && word?.meanings.map((meaning, i) =>
-                    <Meaning
-                        key={i}
-                        name={meaning.partOfSpeech}
-                        definitions={meaning.definitions.map(def => def.definition)}
-                        synonyms={meaning.synonyms}
-                        antonyms={meaning.antonyms}
-                        example={meaning.definitions.map(def => def.example)}
-                        fontName={font}
-                    />)}
-                <h1 className="text-sm font-bold underline mb-10">
-                    Source Placeholder
-                </h1>
+                {searchedWord && <DefinitionPage searchedWord={searchedWord}></DefinitionPage>}
             </div>
         </div>
 

@@ -7,14 +7,9 @@ interface categoryProps {
   example: (string | undefined)[],
   synonyms?: string[],
   antonyms?: string[],
-  fontName: string
 }
 
-const Meaning = ({ name: type, definitions, example, synonyms, antonyms, fontName }: categoryProps) => {
-
-  useEffect(() => {
-    console.log(fontName)
-  }, [fontName])
+const Meaning = ({ name: type, definitions, example, synonyms, antonyms }: categoryProps) => {
 
   return (
     <div className={`flex flex-col gap-8 text-[18px] w-[100%]`}>
