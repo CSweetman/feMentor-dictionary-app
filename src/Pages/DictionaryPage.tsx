@@ -3,6 +3,7 @@ import Meaning from '../components/Meaning'
 import Navbar from '../components/Navbar'
 import { GetWordDefinitions } from '../utils/DictionaryAPI';
 import { capitalizeFirstLetter } from '../utils/utils';
+import { BadSearchPage } from './BadSearchPage';
 import DefinitionPage from './DefinitionPage';
 
 export const fontNames = ['Sans', 'Serif', 'Mono'] as const;
@@ -43,8 +44,13 @@ const DictionaryPage = () => {
                 meanings: meanings
             }
             setWord(searchedWord)
+            setBadResultFlag(false)
             setSearch('')
-        }).catch(e => setBadResultFlag(true))
+        }).catch(e => {
+            setBadResultFlag(true)
+            setWord(undefined)
+            setSearch('')
+        })
     }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -78,10 +84,8 @@ const DictionaryPage = () => {
                         <img src='src\assets\images\icon-search.svg' onClick={e => handleSearch(search)} />
                     </button>
                 </div>
-                <h1 className="text-[64px] font-bold">
-                    {searchedWord && capitalizeFirstLetter(searchedWord.word)}
-                </h1>
-                {searchedWord && <DefinitionPage searchedWord={searchedWord}></DefinitionPage>}
+                {searchedWord && <DefinitionPage searchedWord={searchedWord} />}
+                {badResultFlag && <BadSearchPage />}
             </div>
         </div>
 
