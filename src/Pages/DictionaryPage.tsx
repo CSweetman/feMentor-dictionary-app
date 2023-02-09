@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Category from '../components/Category'
+import Meaning from '../components/Meaning'
 import Navbar from '../components/Navbar'
+import { GetWordDefinitions } from '../utils/DictionaryAPI';
 
 export const fontNames = ['Sans', 'Serif', 'Mono'] as const;
 export type fonts = typeof fontNames[number]
@@ -9,10 +10,51 @@ const DictionaryPage = () => {
     
     const [font, setFont] = useState<string>("sans")
     const [search, setSearch] = useState("")
+    const [badResultFlag, setBadResultFlag] = useState<boolean>(false)
+    const [word, setWord] = useState<IWord | undefined>(undefined)
+
+    interface IWord {
+        word: string,
+        phonetics: string,
+        meanings: IMeanings[]
+    }
+
+    interface IMeanings {
+        partOfSpeech: string,
+        synonyms: string[],
+        antonyms: string[]
+        definitions: {
+            definition: string
+            example?: string
+        }[]
+        sourceUrls: string[]
+    }
+
+
 
     useEffect(() => {
-        console.log(font)
-    }, [font])
+        GetWordDefinitions('bear').then(res => {
+            const data = res.data[0]
+            console.log(data)
+            const definitions: string[] = data.meanings.map((mean: any) => mean.definitions.map((def: any) => def.definition)).flat()
+            const synonyms: string[] = data.meanings.map((mean: any) => mean.synonyms).flat()
+            const antonyms: string[] = data.meanings.map((mean: any) => mean.antonyms).flat()
+            const partOfSpeech: string = data.meanings.map((mean: any) => mean.partOfSpeech)
+
+            const meanings: IMeanings[] = data.meanings
+            const searchedWord: IWord = {
+                word: data.word,
+                phonetics: data.phonetics[1],
+                meanings: meanings
+            }
+            setWord(searchedWord)
+        }).catch(e => setBadResultFlag(true))
+    }, [])
+
+    useEffect(() => {
+        console.log(word)
+        console.log(word?.meanings[0].definitions.map(def => def.definition))
+    }, [word])
 
     return (
         <div className="w-[40vw] h-[100vh] flex flex-col items-center m-auto">
@@ -25,20 +67,16 @@ const DictionaryPage = () => {
                 <h1 className="text-3xl font-bold underline mb-10">
                     Searched Word Placeholder
                 </h1>
-                <Category
-                    name={'noun'}
-                    definitions={["Used as a greeting or to begin a phone conversation."]}
-                    synonyms={["electronic keyboard", "greetings"]}
-                    antonyms={["goodbye", "sayonara"]}
-                    example={undefined}
-                    fontName={font} />
-                <Category
-                    name={'noun'}
-                    definitions={["Replacement for Hiyapapaya and Zappy!"]}
-                    synonyms={["electronic keyboard", "greetings"]}
-                    antonyms={undefined}
-                    example={"Zoo wee mama"}
-                    fontName={font} />
+                {word && word?.meanings.map((meaning, i) =>
+                    <Meaning
+                        key={i}
+                        name={meaning.partOfSpeech}
+                        definitions={meaning.definitions.map(def => def.definition)}
+                        synonyms={meaning.synonyms}
+                        antonyms={meaning.antonyms}
+                        example={meaning.definitions.map(def => def.example)}
+                        fontName={font}
+                    />)}
                 <h1 className="text-sm font-bold underline mb-10">
                     Source Placeholder
                 </h1>

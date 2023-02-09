@@ -54,10 +54,7 @@ const Navbar = ({ font: currentFont, setFont }: NavbarProps) => {
     <div className='w-[100%] h-8 flex justify-between mb-4'>
         <img src="src\assets\images\logo.svg" alt="" />
         <div className='flex items-center gap-5'>
-          
-        
         <Select options={options} defaultValue={options[0]} onChange={e => { if (e) setFont(e.value.toLowerCase()) }} styles={colorStyles}></Select>
-        
         <div className='border-l ml-[-3px] border-gray-200 h-[100%]'></div>
         <input type="checkbox" className={`toggle toggle-primary`} onChange={handleToggle} />
         </div>
