@@ -27,7 +27,12 @@ export interface IMeanings {
     sourceUrls: string[]
 }
 
-const DictionaryPage = () => {
+interface DictionaryPageProps {
+    theme?: string,
+    setTheme: () => void
+}
+
+const DictionaryPage = ({ theme, setTheme }: DictionaryPageProps) => {
 
     const [font, setFont] = useState<string>("sans")
     const [search, setSearch] = useState("")
@@ -38,7 +43,6 @@ const DictionaryPage = () => {
     const handleSearch = (lookUp: string) => {
         GetWordDefinitions(lookUp).then(res => {
             const data = res.data[0]
-            console.log(data)
             const meanings: IMeanings[] = data.meanings
             const searchedWord: IWord = {
                 word: data.word,
@@ -68,14 +72,10 @@ const DictionaryPage = () => {
     //     // console.log(word?.meanings[0].definitions.map(def => def.definition))
     // }, [searchedWord])
 
-    // useEffect(() => {
-    //     console.log(searchedWord)
-    // }, [searchedWord])
-
     return (
-        <div className={`w-[80vw] lg:w-[40vw] h-[100vh] flex flex-col items-center m-auto font-${font}`}>
+        <div className={`w-[80vw] lg:w-[40vw] h-[100%] min-h-[100vh] flex flex-col items-center m-auto font-${font}`}>
             <div className='flex flex-col w-[100%] gap-4 mt-8'>
-                <Navbar font={font} setFont={setFont}></Navbar>
+                <Navbar font={font} setFont={setFont} theme={theme} setTheme={setTheme}></Navbar>
                 <div className='flex w-[95%] m-auto max-h-12 grow-[2] bg-gray-100 rounded-xl focus-within:outline-primary focus-within:outline focus-within:outline-[1px]'>
                     <input
                         type="text" placeholder="Type here"
@@ -88,7 +88,7 @@ const DictionaryPage = () => {
                         <img src='src\assets\images\icon-search.svg' onClick={e => handleSearch(search)} />
                     </button>
                 </div>
-                {searchedWord && <DefinitionPage searchedWord={searchedWord} />}
+                {searchedWord && <DefinitionPage searchedWord={searchedWord} theme={theme} />}
                 {badResultFlag && <BadSearchPage />}
             </div>
         </div>

@@ -1,19 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Meaning from '../components/Meaning'
 import { capitalizeFirstLetter } from '../utils/utils'
 import { IWord } from './DictionaryPage'
 
 interface DefinitionPageProps {
     searchedWord: IWord
+    theme: string | undefined
 }
 
-const DefinitionPage = ({ searchedWord }: DefinitionPageProps) => {
+
+const DefinitionPage = ({ searchedWord, theme }: DefinitionPageProps) => {
     return (
         <div>
 
-            <div className='flex justify-between'>
+            <div className='flex justify-between dark:text-white'>
                 <div>
-                    <h1 className="text-[64px] font-bold">
+                    <h1 className={(theme === 'light' ? 'text-black' : 'text-white') + " text-[64px] font-bold"}>
                         {searchedWord && capitalizeFirstLetter(searchedWord.word)}
                     </h1>
                     <p className='text-[20px] text-primary'>{searchedWord.phonetics}</p>
@@ -36,7 +38,7 @@ const DefinitionPage = ({ searchedWord }: DefinitionPageProps) => {
                         example={meaning.definitions.map(def => def.example)}
                     />)
             }
-            <h1 className="text-sm font-bold underline mb-10">
+            <h1 className="text-sm underline mb-10 text-neutral">
                 Source Placeholder
             </h1>
         </div>
